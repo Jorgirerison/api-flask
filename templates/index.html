@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="icon" type="image/png" href="infinity_ico.png" sizes="16x16">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+
+</head>
+
+<body>
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal bottom-sheet">
+        <div class="row">
+            <h3>Adicionar um contato</h3>
+            <form action="/salvar_contato" , method="post">
+                <div style="background-color:#fff;text-align:right">
+                    <button data-target="modal1" class="waves-effect waves-light btn-large blue" type="submit"><i
+                            class="material-icons right">add</i>Adicionar Contato</button>
+                    <a data-target="modal1" class="waves-effect waves-light btn-large red"><i
+                            class="material-icons right">clear</i>Limpar campos</a>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">account_circle</i>
+                        <input value='Fulano de tal' name="nome" type="text">
+                        <label for="icon_nome">Nome</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">email</i>
+                        <input value='fulano@email.com' name="email" type="tel" class="validate">
+                        <label for="icon_email">email</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">phone</i>
+                        <input type="text" name="celular" value='85-999001088' class="validate">
+                        <label for="icon_prefix">telefone</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">tag</i>
+                        <!--label for="icon_telephone2">tags</label-->
+                        <div class="chips chips-initial">
+                            <input type="tel" name="tags" class="custom-class">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo"><i class="material-icons">all_inclusive</i> Infinity Flask</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Contatos</a></li>
+                <li><a href="#">Sobre</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="card-panel gray">
+            <div style="background-color:#fff;text-align:right">
+                <a data-target="modal1" class="waves-effect waves-light btn-large modal-trigger" href="#modal1"><i
+                        class="material-icons right">add</i>Adicionar Contato</a>
+            </div>
+
+
+
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Celular</th>
+                        <th>#Tags</th>
+                        <th>...</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for contato in contatos %}
+                    <tr>
+                        <td>{{contato.nome}}</td>
+                        <td>{{contato.email}}</td>
+                        <td>{{contato.celular}}</td>
+
+                        <td>
+                            {% for tag,link in zip(contato.tags,contato.links_img_tag) %}
+                            <div class="chip">
+                                <img src="{{link}}" alt="Contact Person"> {{tag}}
+                                <div>
+                                    {% endfor %}
+                        </td>
+                        <td>
+                            <form action="/deletar_contato" , method="post">
+                                <button class="waves-effect waves-light btn-small red"><i
+                                        class="material-icons right">delete</i>Deletar</button>
+                                <input type="hidden" name="id" value="{{contato.id}}">
+                            </form>
+                            <br>
+                            <form action="/editar_contato" , method="post">
+                                <button class="waves-effect waves-light btn-small blue"><i
+                                        class="material-icons right">edit</i>Editar</button>
+                                <input type="hidden" name="id" value="{{id}}">
+                            </form>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.modal').modal();
+        });
+        $('.chips-initial').chips({
+            placeholder: 'Enter a tag',
+            secondaryPlaceholder: '+Tag',
+            autocompleteOptions: {
+                data: {
+                    'Familia': null,
+                    'Trabalho': null,
+                    'Compras': null
+                },
+                limit: Infinity,
+                minLength: 1
+            },
+            data: [{
+                tag: 'Familia',
+            }],
+        });
+
+    </script>
+</body>
+
+</html>
